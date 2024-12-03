@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <link
+            href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css"
+            rel="stylesheet">
+        <link
+            href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css"
+            rel="stylesheet" />
+        <script
+            src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
+        <title>My first Vue page</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f5f5f5;
+                margin: 0;
+                padding: 0;
+            }
+            .page-header {
+                background-color: #6200ea;
+                color: white;
+                padding: 16px;
+                text-align: center;
+                font-size: 1.5rem;
+            }
+            .question-container {
+                margin: 16px;
+                padding: 16px;
+                border-radius: 8px;
+                background-color: #ede7f6;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            .result-card {
+                margin: 32px auto;
+                max-width: 400px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+
+            <v-app class="bg-purple-lighten-6">
+                <div class="pa-4 bg-purple text-white">แบบทดสอบ (
+                    วิชาการงานอาชีพ ) <v-icon>$vuetify</v-icon></div>
+                    <div v-if="page === 1" class="text-center">
+                        <v-container>
+                            <v-row justify="center">
+                                <v-col cols="12" md="8" lg="6">
+                                    <v-card class="mx-auto my-4" color="purple-lighten-5" outlined>
+                                        <v-card-title class="text-h5 text-primary">
+                                            ยินดีต้อนรับสู่แบบทดสอบ
+                                        </v-card-title>
+                                        <v-card-text>
+                                            <p class="text-body-1">
+                                                แบบทดสอบนี้จัดทำขึ้นเพื่อประเมินความรู้ในวิชาการงานอาชีพ 
+                                                โปรดเตรียมตัวให้พร้อมก่อนเริ่มทำแบบทดสอบ
+                                            </p>
+                                            <p class="text-body-2 text-secondary">
+                                                คลิกปุ่ม "เริ่มทำแบบทดสอบ" ด้านล่าง 
+                                            </p>
+                                        </v-card-text>
+                                        <v-card-actions class="justify-center">
+                                            <v-btn @click="page = 2" color="purple" class="text-white">
+                                                <v-icon left>mdi-play-circle</v-icon>
+                                                เริ่มทำแบบทดสอบ
+                                            </v-btn>
+                                        </v-card-actions>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </div>
+                    
+
+                <div v-if="page === 2">
+                    <div v-for="(q, i) in qlist" :key="i"
+                        class="my-1 pa-4 border">
+
+                        <v-row class="align-center">
+                            <v-col cols="auto">
+                                <v-icon
+                                    color="blue-darken-2"
+                                    icon="mdi-message-text"
+                                    size="large"></v-icon>
+                            </v-col>
+                            <v-col>
+                                <p class="mb-0 text-primary">ข้อที่ {{ i + 1
+                                    }}</p>
+                            </v-col>
+                        </v-row>
+
+                        <v-card class="pa-3 my-2 text-left"
+                            color="purple-lighten-4" outlined>
+                            <div class="append-icon" v-html="q.title"
+                                class="pa-2"></div>
+                        </v-card>
+
+                        <v-radio-group v-model="answers[i]" class="mt-2 text-black">
+                            <v-radio
+                                v-for="(otxt, ov) in q.options"
+                                :key="ov"
+                                :value="ov + 1"
+                                :label="otxt"></v-radio>
+                        </v-radio-group>
+                    </div>
+
+                    <div
+                        class="position-sticky bottom-0 pa-4 bg-purple-lighten-1 text-white">
+                        <v-btn class="bg-purple text-white" v-if="validate()"
+                            @click="grading()">
+                            <v-icon>mdi-check</v-icon> ตรวจคำตอบ
+                        </v-btn>
+                        <div v-else>กรุณาตอบให้ครบ</div>
+                    </div>
+                </div>
+
+                <v-container v-if="page === 3" class="result-card">
+                    <v-card color="purple-lighten-5" outlined>
+                        <v-card-title class="text-h5 text-primary">
+                            ผลการทำแบบทดสอบ
+                        </v-card-title>
+                        <v-card-text>
+                            <p class="text-h6 text-success">คุณได้คะแนน {{ score
+                                }} / {{ qlist.length }}</p>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-btn color="purple" @click="resetQuiz">
+                                ทำแบบทดสอบใหม่
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-container>
+
+            </v-app>
+        </div>
+
+        <script>
+        const { createApp } = Vue;
+        const { createVuetify } = Vuetify;
+
+        const vuetify = createVuetify({
+    theme: {
+        defaultTheme: 'light',
+        themes: {
+            light: {
+                colors: {
+                    background: '#f0f4ff', 
+                    surface: '#ffffff',
+                    primary: '#6200ea',
+                    secondary: '#03dac6',
+                },
+            },
+        },
+    },
+});
+
+
+
+        createApp({
+            data() {
+                return {
+                    qlist: [],
+                    answers: [],
+                    score: 0,
+                    page: 1,
+                };
+            },
+            mounted() {
+                this.load_data();
+            },
+            methods: {
+                async load_data() {
+                    try {
+                        const res = await fetch("w2.json");
+                        this.qlist = await res.json();
+                        this.answers = new Array(this.qlist.length).fill(null);
+                    } catch (err) {
+                        console.error("Failed to load data:", err);
+                    }
+                },
+                validate() {
+                    return this.answers.every((answer) => answer !== null);
+                },
+                grading() {
+                    let score = 0;
+                    this.qlist.forEach((q, index) => {
+                        if (this.answers[index] === q.answer) {
+                            score++;
+                        }
+                    });
+                    this.score = score;
+                    this.page = 3;
+                },
+                resetQuiz() {
+                    this.answers = new Array(this.qlist.length).fill(null);
+                    this.score = 0;
+                    this.page = 1;
+                },
+            },
+        }).use(vuetify).mount("#app");
+    </script>
+
+    </body>
+</html>
