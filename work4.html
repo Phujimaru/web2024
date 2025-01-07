@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Frame Example</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.5.2/dist/aframe-extras.min.js"></script>
+    
+</head>
+<body>
+    <a-scene>
+        
+      
+        <a-sky color="#ECECEC"  src="./image/road4.jpg"></a-sky><!--ก้อนพื้นหลัง-->
+
+        <a-text value="GTR Drift Donut!" position="0 3 -4" color="red" 
+        align="center" width="6"></a-text>
+
+        <a-text value="PhuPha KaewThong  \n 663380357-2" position="0 4 -4" color="red" 
+        align="center" width="6"></a-text>
+
+        <a-entity 
+        gltf-model="./model/Nissan GTR.glb" 
+        scale="0.5 0.5 0.5" 
+        position="0 0 -4"
+        animation="property: position; to: 4 0 -4; dur: 4000; easing: linear; loop: true; dir: alternate"
+        animation__rotation="property: rotation; to: 0 360 0; dur: 4000; easing: linear; loop: true">
+        
+        <!-- เพิ่มควัน -->
+        <a-entity 
+            particle-system="preset: smoke; color: #666666; particleCount: 1000" 
+            position="0 -0.2 -1">
+        </a-entity>
+    
+    </a-entity><!--รถหมุน-->
+
+
+    
+
+        
+        <a-entity 
+        gltf-model="./model/Traffic Light.glb" 
+        animation-mixer="clip:*" 
+        scale="1 1 1" 
+        position="3 -1 -6" 
+        rotation="0 0 0">
+    </a-entity>
+       
+        
+       
+  
+    <a-sound src="sound/1-04. Corn Dog.mp3" autoplay="true" loop="true" preload="auto" position="0 2 -4"></a-sound>
+
+
+        <a-camera position="0 1.6 0"></a-camera> <!--กล้องเริ่ม-->
+      </a-scene>
+</body>
+</html>
+
+
+
+
+
